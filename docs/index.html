@@ -121,7 +121,6 @@
 
 
     async function loadWeb3() {
-      if (typeof window.ethereum !== 'undefined') {
         console.log('MetaMask is installed!');
           window.web3 = new Web3(window.ethereum);
           window.ethereum.enable();
@@ -130,13 +129,6 @@
           console.log(networkId)
           updateStatus("#008000", `Connected to ${addressMap[networkId]["networkName"]}`);
           window.contract = await loadContract();
-      } else {
-        updateStatus('red', "Please install MetaMask");
-      }
-    }
-
-    async function load() {
-      await loadWeb3();
     }
 
     function updateStatus(color, status) {
@@ -207,7 +199,30 @@
         document.getElementById("description").innerHTML = "data.description";
     }
 
-    load()
+
+  window.addEventListener("load", function() {
+    if (window.ethereum) {
+      // use MetaMask's provider
+      await loadWeb3();
+      // detect Metamask account change
+      window.ethereum.on('accountsChanged', function (accounts) {
+        await loadWeb3();
+      });
+      // detect Network account change
+      window.ethereum.on('networkChanged', function(networkId){
+        await loadWeb3();
+      });
+    } else {
+      updateStatus('red', "Please install MetaMask");
+      console.warn(
+        "No web3 detected. Falling back to http://127.0.0.1:8545. You should remove this fallback when you deploy live",
+      );
+      // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+      App.web3 = new Web3(
+        new Web3.providers.HttpProvider("http://127.0.0.1:7545"),
+      );
+    }
+  });
 
   </script>
 </html>
