@@ -82,12 +82,31 @@
     
   </body>
   <script>
+    const ethereumButton = document.querySelector('.enableEthereumButton');
+    const showAccount = document.querySelector('.showAccount');
+
+    const addressMap = {
+      "mainnet": "0x4A4f4A202C840f7247CfCb429e1B41A5509176D8",
+      "ropsten": "0x766eeb009d8f97acd285026d039783b985feac8e"
+    }
+
+    // only need mintNFT() for this UI
+    const MinterABI = [
+      {
+        "inputs": [
+          { "internalType": "address", "name": "recipient", "type": "address" },
+          { "internalType": "string", "name": "tokenURI", "type": "string" }
+        ],
+        "name": "mintNFT",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ]
+
     if (typeof window.ethereum !== 'undefined') {
       console.log('MetaMask is installed!');
     }
-
-    const ethereumButton = document.querySelector('.enableEthereumButton');
-    const showAccount = document.querySelector('.showAccount');
 
     ethereumButton.addEventListener('click', () => {
       getAccount();
