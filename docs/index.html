@@ -158,7 +158,7 @@
     function showPreview() {
       ipfsForm.style.display = 'none';
       const metaDataURL = `https://gateway.pinata.cloud/ipfs/${cid}`
-      fetch(metaDataURL).then(data => {return data}).then(res=> {console.log(res.body)})
+      fetch(metaDataURL).then(res => {return res.json}).then(data=> {console.log(data)})
     }
 
     async function mintNFT() {
