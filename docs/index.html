@@ -68,6 +68,7 @@
     const activeDot = document.querySelector(".dot")
 
     var networkId = ""
+    var account = ""
     var cid = ""
 
     const pinServiceURL = "https://66yog7g1k5.execute-api.us-east-1.amazonaws.com/"
@@ -139,7 +140,7 @@
 
     async function getAccount() {
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-      const account = accounts[0];
+      account = accounts[0];
 
       activeDot.style.backgrounColor = "#00800"
       showAccount.innerHTML = account.substring(0, 7) + "...";
@@ -181,7 +182,6 @@
     }
 
     async function mintNFT() {
-      const account = await getCurrentAccount();
       const metaURI = `ipfs://${cid}`
       const mint = await window.contract.methods.mintNFT(account, metaURI).send({ from: account });
       updateStatus("#008000", 'Minted.');
