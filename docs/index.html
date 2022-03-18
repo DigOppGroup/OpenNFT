@@ -124,7 +124,7 @@
     async function load() {
       await loadWeb3();
       window.contract = await loadContract();
-      networkId = await web3.eth.net.getId().to_string();
+      networkId = await web3.eth.net.getId();
       console.log(networkId)
       updateStatus(`Connected to ${addressMap[networkId]["networkName"]}`);
     }
