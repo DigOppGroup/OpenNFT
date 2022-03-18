@@ -17,14 +17,6 @@
     <!-- Custom styles for this template -->
     <link href="cover.css" rel="stylesheet">
 
-    <style>
-        .dot {
-          height: 15px;
-          width: 15px;
-          border-radius: 50%;
-          display: inline-block;
-        }
-    </style>
   </head>
   <body class="d-flex h-100 text-center text-white bg-dark">
     
@@ -35,14 +27,14 @@
           <nav class="nav nav-masthead justify-content-center float-md-end">
             <a class="nav-link" target="_blank" href="https://etherscan.io/address/0x4a4f4a202c840f7247cfcb429e1b41a5509176d8">Contract</a>
             <a class="nav-link" href="faq.html">FAQ</a>
-            <p class="nav-link"><span class="dot"></span><span class="showAccount"></span></p>
+            <p class="nav-link"><span  style="display: none" class="dot"></span><span class="showAccount"></span></p>
           </nav>
         </div>
       </header>
 
-      <main class="px-3">
+      <main class="px-3 ">
+        <p class="lead" id="info">To mint an NFT using our OpenNFT smart contract, just connect to metamask, upload an image, give it a name and description, and then click mint!</p>
         <p id="status"></p>
-        <p class="lead">To mint an NFT using our OpenNFT smart contract, just connect to metamask, upload an image, give it a name and description, and then click mint!</p>
         <p class="lead">
           <button id="connectMetamask" style="display: none;" class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to Metamask</button>
           <form id="form" style="display: none">
@@ -50,7 +42,13 @@
             <input name="description" type="textArea" placeholder="Description"/>
             <input name="file" type="file" />
             <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white formSubmit">Pin to IPFS</a>
+            
           </form>
+          <div class="preview">
+            <p id="name"></p>
+            <p id="description"></p>
+          </div>
+          <a href="#" style="display: none" class="btn btn-lg btn-secondary fw-bold border-white bg-white mintNFT">Mint</a>
         </p>
       </main>
 
@@ -64,7 +62,9 @@
     const ethereumButton = document.querySelector('.enableEthereumButton');
     const showAccount = document.querySelector('.showAccount');
     const formSubmit = document.querySelector('.formSubmit');
+    const mintButton = document.querySelector('.mintNFT');
     const ipfsForm = document.querySelector("form");
+    const previewArea = document.querySelector(".preview")
     const activeDot = document.querySelector(".dot")
 
     var networkId = ""
@@ -102,6 +102,11 @@
       submitForm();
     });
 
+    formSubmit.addEventListener('click', () => {
+      mintNFT();
+    });
+
+
     async function loadWeb3() {
       if (typeof window.ethereum !== 'undefined') {
         console.log('MetaMask is installed!');
@@ -119,7 +124,6 @@
 
     async function load() {
       await loadWeb3();
-
     }
 
     function updateStatus(color, status) {
@@ -137,7 +141,7 @@
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       const account = accounts[0];
 
-      activeDot.style.backgroundColor = "#008000"
+      activeDot.style.display = "block"
       showAccount.innerHTML = account.substring(0, 7) + "...";
       displayForm()
     }
@@ -148,6 +152,7 @@
     }
 
     function submitForm() {
+      updateStatus("#008000", 'Processing...');
       const request = new XMLHttpRequest();
       request.onreadystatechange = function() {
         if (request.readyState == XMLHttpRequest.DONE) {
@@ -161,9 +166,18 @@
     }
 
     function showPreview() {
+      updateStatus("#008000", 'Pinned to IPFS!');
       ipfsForm.style.display = 'none';
+
       const metaDataURL = `https://ipfs.io/ipfs/${cid}`
-      fetch(metaDataURL).then(res => {return res.json()}).then(data=> {console.log(data)})
+      fetch(metaDataURL).then(res => {return res.json()}).then(data=> {
+        var img = document.createElement("img");
+        img.src = `https://ipfs.io/ipfs/${data.IpfsHash}`;
+        preview.append(img)
+        document.getElementById("name").innerHTML = data.name;
+        document.getElementById("description").innerHTML = data.description;
+        mintButton.style.display = 'inline';
+      })
     }
 
     async function mintNFT() {

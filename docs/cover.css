@@ -22,10 +22,13 @@ body {
 .cover-container {
   max-width: 42em;
 }
-
-/*
- * Header
- */
+.dot {
+  height: 15px;
+  width: 15px;
+  background-color: #008000;
+  border-radius: 50%;
+  display: inline-block;
+}
 
 .nav-masthead .nav-link {
   padding: 0.25rem 0;
