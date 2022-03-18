@@ -64,10 +64,12 @@
 
   <main class="px-3">
     <h1>FAQ</h1>
+    <h2>How does it work?</h2>
+    <p>First, you connect to your wallet. THen you upload an image, name, and description. The image will be pinned to IPFS and a metadata file with the name, description, and reference to the image will also be pinned. The final step is to mint the NFT by calling the smart contract and passing in the location of that metadata file.</p>
     <h2>What is IPFS?</h2>
     <p>IPFS is a distributed file system. We use IPFS to host the images and metadata for the NFTs. We use the Pinata pinning service to upload the files to the network.</p>
     <h2>Why only Metamask?</h2>
-    <p>This is something we put together in a few hours as an experiment. Feel free to submit a PR on Github with additional functionality!</p>
+    <p>This is something we put together in a few hours as an experiment. Other wallets may work, they just haven't been tested. Feel free to submit a PR on Github with additional functionality!</p>
     <h2>Is the contract audited?</h2>
     <p>No, but you can view it on etherscan. You aren't approving any tokens and your only risk is the gas cost on a failed transaction.</p>
     <h2>Can I mint an existing NFT for myself?</h2>
