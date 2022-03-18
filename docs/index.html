@@ -69,9 +69,9 @@
     <p class="lead">
       <button id="connectMetamask" class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to Metamask</button>
       <form id="form" style="display: none">
-        <input type="text" placeholder="Name" />
-        <input type="textArea" placeholder="Description"/>
-        <input type="file" />
+        <input name="name" type="text" placeholder="Name" />
+        <input name="description" type="textArea" placeholder="Description"/>
+        <input name="file" type="file" />
         <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white formSubmit">Pin to IPFS</a>
       </form>
     </p>
@@ -126,6 +126,11 @@
 
     function submitForm() {
       const request = new XMLHttpRequest();
+      request.onreadystatechange = function() {
+          if (request.readyState == XMLHttpRequest.DONE) {
+              console.log(request.responseText);
+          }
+      }
       request.open("POST", pinServiceURL);
       request.send(new FormData(ipfsForm));
     }
