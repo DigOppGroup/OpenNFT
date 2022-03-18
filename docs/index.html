@@ -56,8 +56,8 @@
     <div>
       <h3 class="float-md-start mb-0">OpenNFT</h3>
       <nav class="nav nav-masthead justify-content-center float-md-end">
-        <a class="nav-link" href="#">Features</a>
         <a class="nav-link" target="_blank" href="https://etherscan.io/address/0x4a4f4a202c840f7247cfcb429e1b41a5509176d8">Contract</a>
+        <p class="nav-link"><span class="showAccount"></span></p>
       </nav>
     </div>
   </header>
@@ -66,8 +66,7 @@
     <h1>Mint an NFT</h1>
     <p class="lead">To mint an NFT using our OpenNFT smart contract, just connect to metamask, upload an image, give it a name and description, and then click mint!</p>
     <p class="lead">
-      <button class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to Metamask</button>
-      <h2>Account: <span class="showAccount"></span></h2>
+      <button id="connectMetamask" class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to Metamask</button>
       <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Upload</a>
     </p>
   </main>
@@ -77,9 +76,6 @@
     <p>Cover template for <a href="https://twitter.com/0xjellyBeard" class="text-white" target="_blank">Bootstrap</a>, by <a href="https://twitter.com/mdo" class="text-white" target="_blank">@mdo</a>.</p>
   </footer>
 </div>
-
-
-    
   </body>
   <script>
     const ethereumButton = document.querySelector('.enableEthereumButton');
@@ -115,7 +111,11 @@
     async function getAccount() {
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       const account = accounts[0];
-      showAccount.innerHTML = account;
+      showAccount.innerHTML = account.substring(0, 5) + "...";
+
+      // remove conncet button
+      var elem = document.getElementById('connectMetamask');
+      elem.parentNode.removeChild(elem);
     }
   </script>
 </html>
