@@ -25,7 +25,7 @@
         <div>
           <h3 class="float-md-start mb-0">OpenNFT</h3>
           <nav class="nav nav-masthead justify-content-center float-md-end">
-            <a class="nav-link" target="_blank" href="https://etherscan.io/address/0x4a4f4a202c840f7247cfcb429e1b41a5509176d8">Contract</a>
+            <a class="nav-link" id="contractLink" target="_blank" href="https://etherscan.io/address/0x4a4f4a202c840f7247cfcb429e1b41a5509176d8">Contract</a>
             <a class="nav-link" href="faq.html">FAQ</a>
             <p class="nav-link"><span class="dot"></span><span class="showAccount"></span></p>
           </nav>
@@ -40,6 +40,7 @@
           <form id="form" style="display: none">
             <div class="form-group">
               <label for="fileInput">Image file (.jpg or png)</label>
+            </br>
               <input name="file" id="fileInput" type="file" class="form-control-file" />
             </div>
             <div class="form-group">
@@ -86,12 +87,12 @@
       "1": {
         networkName: "Mainnet",
         contractAddress: "0x4A4f4A202C840f7247CfCb429e1B41A5509176D8",
-        explorer: "https://etherscan.io/tx/"}
+        explorer: "https://etherscan.io"}
         ,
       "3": {
         networkName: "Ropsten",
         contractAddress: "0x766eeb009d8f97acd285026d039783b985feac8e",
-        explorer: "https://ropsten.etherscan.io/tx/"}
+        explorer: "https://ropsten.etherscan.io"}
     }
 
     const MinterABI = [
@@ -128,6 +129,7 @@
           networkId = await window.web3.eth.getChainId();
           console.log(networkId)
           updateStatus("#008000", `Connected to ${addressMap[networkId]["networkName"]}`);
+          document.getElementById("contractLink").href=`${addressMap[networkId]["explorer"]}/address/${addressMap[networkId]["contractAddress"]}`; 
           window.contract = await loadContract();
     }
 
@@ -195,7 +197,7 @@
       const mint = await window.contract.methods.mintNFT(account, metaURI).send({ from: account });
       console.log(mint)
       updateStatus("#008000", 'Minted');
-      document.getElementById("name").innerHTML = `<a href="${addressMap[networkId]["explorer"]}${mint.transactionHash}">View Transaction</a>`;
+      document.getElementById("name").innerHTML = `<a href="${addressMap[networkId]["explorer"]}/tx/${mint.transactionHash}">View Transaction</a>`;
         document.getElementById("description").innerHTML = "data.description";
     }
 
