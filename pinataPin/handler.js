@@ -29,24 +29,19 @@ const pinJSONToIPFS = (metadata) => {
     })
     .then(function (response) {
       return response.data;
-      //handle response here
     })
     .catch(function (error) {
       console.log(error);
       return "an error occured";
-      //handle error here
     });
 };
 
 const pinFileToIPFS = (file, name, description) => {
   const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
 
-  //we gather a local file for this example, but any valid readStream source will work here.
   let data = new FormData();
   data.append("file", file);
 
-  //You'll need to make sure that the metadata is in the form of a JSON object that's been convered to a string
-  //metadata is optional
   const metadata = JSON.stringify({
     name: name,
     keyvalues: {
@@ -55,7 +50,6 @@ const pinFileToIPFS = (file, name, description) => {
   });
   data.append("pinataMetadata", metadata);
 
-  //pinataOptions are optional
   const pinataOptions = JSON.stringify({
     cidVersion: 0,
     customPinPolicy: {
@@ -75,7 +69,7 @@ const pinFileToIPFS = (file, name, description) => {
 
   return axios
     .post(url, data, {
-      maxBodyLength: "Infinity", //this is needed to prevent axios from erroring out with large files
+      maxBodyLength: "Infinity",
       headers: {
         "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
         pinata_api_key: pinataApiKey,
@@ -88,7 +82,6 @@ const pinFileToIPFS = (file, name, description) => {
     .catch(function (error) {
       console.log(error);
       return "an error occured";
-      //handle error here
     });
 };
 
@@ -110,7 +103,6 @@ const parseMultipartFormData = async (event) => {
 };
 
 module.exports.pinFile = async (event) => {
-  //const body = JSON.parse(event.body || "{}");
   const { files, fields } = await parseMultipartFormData(event);
 
   const name = fields.name || "";
