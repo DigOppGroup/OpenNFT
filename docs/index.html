@@ -96,7 +96,6 @@
     ]
 
     ethereumButton.addEventListener('click', () => {
-      displayForm()
       getAccount();
     });
 
@@ -128,7 +127,6 @@
           if (request.readyState == XMLHttpRequest.DONE) {
               responseJson = JSON.parse(request.responseText)
               cid = responseJson.IpfsHash
-              console.log(cid)
               showPreview()
           }
       }
@@ -139,7 +137,7 @@
     function showPreview() {
       ipfsForm.style.display = 'none';
       const metaDataURL = `https://gateway.pinata.cloud/ipfs/${cid}`
-      fetch(metaDataURL).then(data => {return data}).then(res=> {console.log(res)})
+      fetch(metaDataURL).then(data => {return data}).then(res=> {console.log(res.body)})
     }
 
   </script>
