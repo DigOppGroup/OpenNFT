@@ -118,7 +118,7 @@
     }
 
     function displayForm() {
-      ethereumButton.parentNode.removeChild(ethereumButton);
+      ethereumButton.style.display = 'none';
       ipfsForm.style.display = 'block';
     }
 
@@ -139,8 +139,7 @@
     function showPreview() {
       ipfsForm.style.display = 'none';
       const metaDataURL = `https://ipfs.io/ipfs/${cid}`
-      fetch(metaData).then(data => {return data.json}).then(res=> {console.log(res)})
-
+      fetch(metaDataURL).then(data => {return data.json}).then(res=> {console.log(res)})
     }
 
   </script>
