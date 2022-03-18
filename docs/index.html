@@ -200,17 +200,17 @@
     }
 
 
-  window.addEventListener("load", async function() {
+  window.addEventListener("load", function() {
     if (window.ethereum) {
       // use MetaMask's provider
-      await loadWeb3();
+      loadWeb3();
       // detect Metamask account change
       window.ethereum.on('accountsChanged', function (accounts) {
-        await loadWeb3();
+        location.reload();
       });
       // detect Network account change
       window.ethereum.on('networkChanged', function(networkId){
-        await loadWeb3();
+        location.reload();
       });
     } else {
       updateStatus('red', "Please install MetaMask");
