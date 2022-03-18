@@ -32,7 +32,6 @@
       </header>
 
       <main class="px-3">
-        <h1>Mint an NFT</h1>
         <p id="status"></p>
         <p class="lead">To mint an NFT using our OpenNFT smart contract, just connect to metamask, upload an image, give it a name and description, and then click mint!</p>
         <p class="lead">
@@ -99,7 +98,7 @@
           window.ethereum.enable();
           ethereumButton.style.display = 'inline';
           window.contract = await loadContract();
-          networkId = await web3.eth.net.getId();
+          networkId = await web3.eth.net.getChainId();
           console.log(networkId)
           updateStatus("green", `Connected to ${addressMap[networkId]["networkName"]}`);
       } else {
