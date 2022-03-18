@@ -27,7 +27,7 @@
           <nav class="nav nav-masthead justify-content-center float-md-end">
             <a class="nav-link" target="_blank" href="https://etherscan.io/address/0x4a4f4a202c840f7247cfcb429e1b41a5509176d8">Contract</a>
             <a class="nav-link" href="faq.html">FAQ</a>
-            <p class="nav-link"><span  style="display: none" class="dot"></span><span class="showAccount"></span></p>
+            <p class="nav-link"><span class="dot"></span><span class="showAccount"></span></p>
           </nav>
         </div>
       </header>
@@ -141,7 +141,7 @@
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       const account = accounts[0];
 
-      activeDot.style.display = "block"
+      activeDot.style.backgrounColor = "#00800"
       showAccount.innerHTML = account.substring(0, 7) + "...";
       displayForm()
     }
