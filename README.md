@@ -1,5 +1,5 @@
 # OpenNFT
-Tool for quick minting nfts
+Tool for quick minting NFTs. Contracts are already deployed and front end coming soon. All you need to do is upload an image and pay some gas to mint. 
 
 # IPFS Uploader
 
@@ -11,7 +11,7 @@ The image and a metadata file are pinned to IPFS. The uploader will return an ob
 {"IpfsHash":"blAHBlahBLAhblaH","PinSize":136,"Timestamp":"2022-03-18T04:52:39.003Z"}
 ```
 
-The IPFS hash is the CID for locating the metadata object on IPFS. You can use the IPFS public gateway to located it. For example: `https://ipfs.io/ipfs/blAHBlahBLAhblaH`
+The IPFS hash is the CID for locating the metadata object on IPFS. You can use the IPFS public gateway to locate it. For example: `https://ipfs.io/ipfs/blAHBlahBLAhblaH`
 
 The will locate the NFT metadata, which would looks something like this: 
 
