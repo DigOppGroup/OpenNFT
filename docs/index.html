@@ -53,7 +53,7 @@
         <h1>Mint an NFT</h1>
         <p class="lead">To mint an NFT using our OpenNFT smart contract, just connect to metamask, upload an image, give it a name and description, and then click mint!</p>
         <p class="lead">
-          <button id="connectMetamask" class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to Metamask</button>
+          <button id="connectMetamask" style="display: none;" class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to Metamask</button>
           <form id="form" style="display: none">
             <input name="name" type="text" placeholder="Name" />
             <input name="description" type="textArea" placeholder="Description"/>
@@ -75,12 +75,18 @@
     const showAccount = document.querySelector('.showAccount');
     const formSubmit = document.querySelector('.formSubmit');
     const ipfsForm = document.querySelector("form");
+    const networkId = ""
     var cid = ""
 
     const pinServiceURL = "https://66yog7g1k5.execute-api.us-east-1.amazonaws.com/"
     const addressMap = {
-      "mainnet": "0x4A4f4A202C840f7247CfCb429e1B41A5509176D8",
-      "ropsten": "0x766eeb009d8f97acd285026d039783b985feac8e"
+      "1": {
+        networkName: "Mainnet",
+        contractAddress: "0x4A4f4A202C840f7247CfCb429e1B41A5509176D8"}
+        ,
+      "3": {
+        networkName: "Ropsten",
+        contractAddress: "0x766eeb009d8f97acd285026d039783b985feac8e"}
     }
 
     const MinterABI = [
@@ -109,6 +115,7 @@
         console.log('MetaMask is installed!');
           window.web3 = new Web3(window.ethereum);
           window.ethereum.enable();
+          ethereumButton.style.display = 'block';
       } else {
         alert("Please use MetaMask.")
       }
@@ -117,7 +124,8 @@
     async function load() {
       await loadWeb3();
       window.contract = await loadContract();
-      updateStatus('Ready!');
+      networkId = `${web3.eth.net.getId()}`
+      updateStatus(`Connected to ${addressMap[networkId]["networkName"]}`);
     }
 
     function updateStatus(status) {
@@ -127,7 +135,7 @@
     }
 
     async function loadContract() {
-      return await new window.web3.eth.Contract(MinterABI, addressMap["ropsten"]);
+      return await new window.web3.eth.Contract(MinterABI, addressMap[networkId]["contractAddress"]);
     }
 
     async function getAccount() {
