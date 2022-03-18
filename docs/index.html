@@ -33,8 +33,8 @@
       </header>
 
       <main class="px-3 ">
-        <p class="lead" id="info">To mint an NFT using our OpenNFT smart contract, just connect to metamask, upload an image, give it a name and description, and then click mint!</p>
         <p id="status"></p>
+        <p class="lead" id="info">To mint an NFT using our OpenNFT smart contract, just connect to metamask, upload an image, give it a name and description, and then click mint!</p>
         <p class="lead">
           <button id="connectMetamask" style="display: none;" class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to MetaMask</button>
           <form id="form" style="display: none">
@@ -153,7 +153,7 @@
     }
 
     function submitForm() {
-      updateStatus("#008000", 'Processing...');
+      updateStatus("#008000", 'Processing... (could take a minute');
       const request = new XMLHttpRequest();
       request.onreadystatechange = function() {
         if (request.readyState == XMLHttpRequest.DONE) {
@@ -167,11 +167,11 @@
     }
 
     function showPreview() {
-      updateStatus("#008000", 'Pinned to IPFS!');
       ipfsForm.style.display = 'none';
 
       const metaDataURL = `https://ipfs.io/ipfs/${cid}`
       fetch(metaDataURL).then(res => {return res.json()}).then(data=> {
+        updateStatus("#008000", 'Pinned to IPFS!');
         var img = document.createElement("img");
         img.src = `https://ipfs.io/ipfs/${data.image.replace("ipfs://", "")}`;
         previewArea.append(img)
