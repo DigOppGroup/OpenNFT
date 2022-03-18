@@ -114,6 +114,20 @@
       getAccount();
     });
 
+    function submitForm() {
+      const formElement = document.querySelector("form");
+      const request = new XMLHttpRequest();
+      request.open("POST", pinServiceURL);
+      request.onload = function(event) {
+        if (request.status == 200) {
+          console.log("Uploaded!");
+        } else {
+          console.log("Error " + oReq.status + " occurred when trying to upload your file.");
+        }
+      };
+      request.send(new FormData(formElement));
+    }
+
     function displayForm() {
       const connectMetamask = document.getElementById('connectMetamask');
       connectMetamask.parentNode.removeChild(connectMetamask);
