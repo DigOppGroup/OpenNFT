@@ -115,7 +115,7 @@
         console.log('MetaMask is installed!');
           window.web3 = new Web3(window.ethereum);
           window.ethereum.enable();
-          ethereumButton.style.display = 'block';
+          ethereumButton.style.display = 'inline';
       } else {
         alert("Please use MetaMask.")
       }
@@ -124,7 +124,7 @@
     async function load() {
       await loadWeb3();
       window.contract = await loadContract();
-      networkId = `${web3.eth.net.getId()}`
+      networkId = await web3.eth.net.getId().to_string();
       updateStatus(`Connected to ${addressMap[networkId]["networkName"]}`);
     }
 
