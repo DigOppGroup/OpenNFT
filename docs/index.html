@@ -54,7 +54,7 @@
         <p class="lead">To mint an NFT using our OpenNFT smart contract, just connect to metamask, upload an image, give it a name and description, and then click mint!</p>
         <p class="lead">
           <button id="connectMetamask" style="display: none;" class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to Metamask</button>
-          <form id="form">
+          <form id="form" style="display: none">
             <input name="name" type="text" placeholder="Name" />
             <input name="description" type="textArea" placeholder="Description"/>
             <input name="file" type="file" />
@@ -166,7 +166,7 @@
 
     function showPreview() {
       ipfsForm.style.display = 'none';
-      const metaDataURL = `https://gateway.pinata.cloud/ipfs/${cid}`
+      const metaDataURL = `https://ipfs.io/ipfs/${cid}`
       fetch(metaDataURL).then(res => {return res.json()}).then(data=> {console.log(data)})
     }
 
