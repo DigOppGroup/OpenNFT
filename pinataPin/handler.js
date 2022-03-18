@@ -137,5 +137,5 @@ module.exports.pinFile = async (event) => {
     body: JSON.stringify(results),
   };
 
-  callback(null, response);
+  return response;
 };
