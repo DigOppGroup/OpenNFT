@@ -153,6 +153,7 @@
     }
 
     function submitForm() {
+      document.getElementById("info").style.display = "none"
       updateStatus("#008000", 'Processing... (could take a minute');
       const request = new XMLHttpRequest();
       request.onreadystatechange = function() {
@@ -173,18 +174,23 @@
       fetch(metaDataURL).then(res => {return res.json()}).then(data=> {
         updateStatus("#008000", 'Pinned to IPFS!');
         var img = document.createElement("img");
+        img.setAttribute("max-width", "80%");
+        img.setAttribute("height", "auto");
         img.src = `https://ipfs.io/ipfs/${data.image.replace("ipfs://", "")}`;
         previewArea.append(img)
         document.getElementById("name").innerHTML = data.name;
         document.getElementById("description").innerHTML = data.description;
+
         mintButton.style.display = 'inline';
       })
     }
 
     async function mintNFT() {
+      mintButton.style.display = 'none';
       const metaURI = `ipfs://${cid}`
       const mint = await window.contract.methods.mintNFT(account, metaURI).send({ from: account });
-      updateStatus("#008000", 'Minted.');
+      updateStatus("#008000", 'Minted');
+
     }
 
     load()
