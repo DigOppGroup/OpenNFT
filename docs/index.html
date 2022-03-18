@@ -59,6 +59,7 @@
             <input name="description" type="textArea" placeholder="Description"/>
             <input name="file" type="file" />
             <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white formSubmit">Pin to IPFS</a>
+            <p id="status"></p>
           </form>
         </p>
       </main>
@@ -99,14 +100,34 @@
       getAccount();
     });
 
-
     formSubmit.addEventListener('click', () => {
       submitForm();
     });
 
+    async function loadWeb3() {
+      if (typeof window.ethereum !== 'undefined') {
+        console.log('MetaMask is installed!');
+          window.web3 = new Web3(window.ethereum);
+          window.ethereum.enable();
+      } else {
+        alert("Please use MetaMask.")
+      }
+    }
 
-    if (typeof window.ethereum !== 'undefined') {
-      console.log('MetaMask is installed!');
+    async function load() {
+      await loadWeb3();
+      window.contract = await loadContract();
+      updateStatus('Ready!');
+    }
+
+    function updateStatus(status) {
+      const statusEl = document.getElementById('status');
+      statusEl.innerHTML = status;
+      console.log(status);
+    }
+
+    async function loadContract() {
+      return await new window.web3.eth.Contract(MinterABI, addressMap["ropsten"]);
     }
 
     async function getAccount() {
@@ -124,11 +145,11 @@
     function submitForm() {
       const request = new XMLHttpRequest();
       request.onreadystatechange = function() {
-          if (request.readyState == XMLHttpRequest.DONE) {
-              responseJson = JSON.parse(request.responseText)
-              cid = responseJson.IpfsHash
-              showPreview()
-          }
+        if (request.readyState == XMLHttpRequest.DONE) {
+          responseJson = JSON.parse(request.responseText)
+          cid = responseJson.IpfsHash
+          showPreview()
+        }
       }
       request.open("POST", pinServiceURL);
       request.send(new FormData(ipfsForm));
@@ -138,6 +159,13 @@
       ipfsForm.style.display = 'none';
       const metaDataURL = `https://gateway.pinata.cloud/ipfs/${cid}`
       fetch(metaDataURL).then(data => {return data}).then(res=> {console.log(res.body)})
+    }
+
+    async function mintNFT() {
+      const account = await getCurrentAccount();
+      const metaURI = `ipfs://${cid}`
+      const mint = await window.contract.methods.mintNFT(account, metaURI).send({ from: account });
+      updateStatus('Updated.');
     }
 
   </script>
