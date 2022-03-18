@@ -38,14 +38,20 @@
         <p class="lead">
           <button id="connectMetamask" style="display: none;" class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to MetaMask</button>
           <form id="form" style="display: none">
-            <input name="name" type="text" placeholder="Name" />
-            <input name="description" type="textArea" placeholder="Description"/>
-            <input name="file" type="file" />
+            <div class="form-group">
+            <input name="name" type="text" class="form-control" placeholder="Name" />
+            </div>
+            <div class="form-group">
+              <textarea name="description" class="form-control" placeholder="Description"></textarea>
+            </div>
+            <div class="form-group">
+            <input name="file" type="file" class="form-control-file" />
+            </div>
             <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white formSubmit">Pin to IPFS</a>
             
           </form>
           <div class="preview">
-            <p id="name"></p>
+            <h3 id="name"></h3>
             <p id="description"></p>
           </div>
           <a href="#" style="display: none" class="btn btn-lg btn-secondary fw-bold border-white bg-white mintNFT">Mint</a>
@@ -155,6 +161,7 @@
     function submitForm() {
       document.getElementById("info").style.display = "none"
       updateStatus("#008000", 'Processing... (could take a minute)');
+      ipfsForm.style.display = 'none';
       const request = new XMLHttpRequest();
       request.onreadystatechange = function() {
         if (request.readyState == XMLHttpRequest.DONE) {
@@ -168,8 +175,6 @@
     }
 
     function showPreview() {
-      ipfsForm.style.display = 'none';
-
       const metaDataURL = `https://ipfs.io/ipfs/${cid}`
       fetch(metaDataURL).then(res => {return res.json()}).then(data=> {
         updateStatus("#008000", 'Pinned to IPFS!');
@@ -187,8 +192,10 @@
 
     async function mintNFT() {
       mintButton.style.display = 'none';
+      updateStatus("#008000", 'Minting...');
       const metaURI = `ipfs://${cid}`
       const mint = await window.contract.methods.mintNFT(account, metaURI).send({ from: account });
+      console.log(mint)
       updateStatus("#008000", 'Minted');
 
     }

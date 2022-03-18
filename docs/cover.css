@@ -50,3 +50,7 @@ body {
   color: #fff;
   border-bottom-color: #fff;
 }
+
+.preview {
+  padding-bottom: 20px;
+}
