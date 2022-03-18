@@ -137,7 +137,7 @@
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       const account = accounts[0];
 
-      dot.style.display = "inline"
+      activeDot.style.display = "inline"
       showAccount.innerHTML = account.substring(0, 7) + "...";
       displayForm()
     }
