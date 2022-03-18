@@ -142,7 +142,7 @@
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       account = accounts[0];
 
-      activeDot.style.backgrounColor = "#00800"
+      activeDot.style.backgroundColor = "#008000"
       showAccount.innerHTML = account.substring(0, 7) + "...";
       displayForm()
     }
