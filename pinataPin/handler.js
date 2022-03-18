@@ -128,8 +128,14 @@ module.exports.pinFile = async (event) => {
 
   const results = await pinJSONToIPFS(nftMetaData);
 
-  return {
+  const response = {
     statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true,
+    },
     body: JSON.stringify(results),
   };
+
+  callback(null, response);
 };

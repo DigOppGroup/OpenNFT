@@ -72,7 +72,7 @@
         <input type="text" placeholder="Name" />
         <input type="textArea" placeholder="Description"/>
         <input type="file" />
-        <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Pin to IPFS</a>
+        <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white formSubmit">Pin to IPFS</a>
       </form>
     </p>
   </main>
@@ -86,6 +86,9 @@
   <script>
     const ethereumButton = document.querySelector('.enableEthereumButton');
     const showAccount = document.querySelector('.showAccount');
+    const formSubmit = document.querySelector('.formSubmit');
+    const ipfsForm = document.querySelector("form");
+
     const pinServiceURL = "https://66yog7g1k5.execute-api.us-east-1.amazonaws.com/"
     const addressMap = {
       "mainnet": "0x4A4f4A202C840f7247CfCb429e1B41A5509176D8",
@@ -105,35 +108,31 @@
       }
     ]
 
-    if (typeof window.ethereum !== 'undefined') {
-      console.log('MetaMask is installed!');
-    }
 
     ethereumButton.addEventListener('click', () => {
       displayForm()
       getAccount();
     });
 
+
+    formSubmit.addEventListener('click', () => {
+      submitForm();
+    });
+
+
+    if (typeof window.ethereum !== 'undefined') {
+      console.log('MetaMask is installed!');
+    }
+
     function submitForm() {
-      const formElement = document.querySelector("form");
       const request = new XMLHttpRequest();
       request.open("POST", pinServiceURL);
-      request.onload = function(event) {
-        if (request.status == 200) {
-          console.log("Uploaded!");
-        } else {
-          console.log("Error " + oReq.status + " occurred when trying to upload your file.");
-        }
-      };
-      request.send(new FormData(formElement));
+      request.send(new FormData(ipfsForm));
     }
 
     function displayForm() {
-      const connectMetamask = document.getElementById('connectMetamask');
-      connectMetamask.parentNode.removeChild(connectMetamask);
-
-      const form = document.getElementById('form');
-      form.style.display = 'block';
+      ethereumButton.parentNode.removeChild(ethereumButton);
+      ipfsForm.style.display = 'block';
     }
 
     async function getAccount() {

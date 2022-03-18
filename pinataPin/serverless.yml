@@ -19,3 +19,4 @@ functions:
       - httpApi:
           path: /
           method: post
+          cors: true
