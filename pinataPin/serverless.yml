@@ -1,0 +1,21 @@
+service: pinatapin
+app: opennft
+org: daltondigopp
+
+frameworkVersion: "2"
+
+provider:
+  environment:
+    PINATA_API_KEY: ${param:pinataApiKey}
+    PINATA_SECRET_API_KEY: ${param:pinataSecretApiKey}
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+
+functions:
+  pinFile:
+    handler: handler.pinFile
+    events:
+      - httpApi:
+          path: /
+          method: post
