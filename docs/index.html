@@ -36,7 +36,7 @@
         <p class="lead" id="info">To mint an NFT using our OpenNFT smart contract, just connect to metamask, upload an image, give it a name and description, and then click mint!</p>
         <p id="status"></p>
         <p class="lead">
-          <button id="connectMetamask" style="display: none;" class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to Metamask</button>
+          <button id="connectMetamask" style="display: none;" class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to MetaMask</button>
           <form id="form" style="display: none">
             <input name="name" type="text" placeholder="Name" />
             <input name="description" type="textArea" placeholder="Description"/>
@@ -173,8 +173,8 @@
       const metaDataURL = `https://ipfs.io/ipfs/${cid}`
       fetch(metaDataURL).then(res => {return res.json()}).then(data=> {
         var img = document.createElement("img");
-        img.src = `https://ipfs.io/ipfs/${data.IpfsHash}`;
-        preview.append(img)
+        img.src = `https://ipfs.io/ipfs/${data.image}`;
+        previewArea.append(img)
         document.getElementById("name").innerHTML = data.name;
         document.getElementById("description").innerHTML = data.description;
         mintButton.style.display = 'inline';
