@@ -88,6 +88,7 @@
     const showAccount = document.querySelector('.showAccount');
     const formSubmit = document.querySelector('.formSubmit');
     const ipfsForm = document.querySelector("form");
+    var cid = ""
 
     const pinServiceURL = "https://66yog7g1k5.execute-api.us-east-1.amazonaws.com/"
     const addressMap = {
@@ -108,7 +109,6 @@
       }
     ]
 
-
     ethereumButton.addEventListener('click', () => {
       displayForm()
       getAccount();
@@ -124,15 +124,11 @@
       console.log('MetaMask is installed!');
     }
 
-    function submitForm() {
-      const request = new XMLHttpRequest();
-      request.onreadystatechange = function() {
-          if (request.readyState == XMLHttpRequest.DONE) {
-              console.log(request.responseText);
-          }
-      }
-      request.open("POST", pinServiceURL);
-      request.send(new FormData(ipfsForm));
+    async function getAccount() {
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      const account = accounts[0];
+      showAccount.innerHTML = account.substring(0, 7) + "...";
+      displayForm()
     }
 
     function displayForm() {
@@ -140,11 +136,26 @@
       ipfsForm.style.display = 'block';
     }
 
-    async function getAccount() {
-      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-      const account = accounts[0];
-      showAccount.innerHTML = account.substring(0, 7) + "...";
-      displayForm()
+    function submitForm() {
+      const request = new XMLHttpRequest();
+      request.onreadystatechange = function() {
+          if (request.readyState == XMLHttpRequest.DONE) {
+              responseJson = JSON.parse(request.responseText)
+              cid = responseJson.IpfsHash
+              console.log(cid)
+              showPreview()
+          }
+      }
+      request.open("POST", pinServiceURL);
+      request.send(new FormData(ipfsForm));
     }
+
+    function showPreview() {
+      ipfsForm.style.display = 'none';
+      const metaDataURL = `https://ipfs.io/ipfs/${cid}`
+      fetch(metaData).then(data => {return data.json}).then(res=> {console.log(res)})
+
+    }
+
   </script>
 </html>
