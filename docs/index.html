@@ -108,10 +108,10 @@
           window.web3 = new Web3(window.ethereum);
           window.ethereum.enable();
           ethereumButton.style.display = 'inline';
-          window.contract = await loadContract();
           networkId = await window.web3.eth.net.getChainId();
           console.log(networkId)
           updateStatus("#008000", `Connected to ${addressMap[networkId]["networkName"]}`);
+          window.contract = await loadContract();
       } else {
         updateStatus('red', "Please install MetaMask");
       }
