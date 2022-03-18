@@ -85,11 +85,13 @@
     const addressMap = {
       "1": {
         networkName: "Mainnet",
-        contractAddress: "0x4A4f4A202C840f7247CfCb429e1B41A5509176D8"}
+        contractAddress: "0x4A4f4A202C840f7247CfCb429e1B41A5509176D8",
+        explorer: "https://etherscan.io/tx/"}
         ,
       "3": {
         networkName: "Ropsten",
-        contractAddress: "0x766eeb009d8f97acd285026d039783b985feac8e"}
+        contractAddress: "0x766eeb009d8f97acd285026d039783b985feac8e",
+        explorer: "https://ropsten.etherscan.io/tx/"}
     }
 
     const MinterABI = [
@@ -201,7 +203,8 @@
       const mint = await window.contract.methods.mintNFT(account, metaURI).send({ from: account });
       console.log(mint)
       updateStatus("#008000", 'Minted');
-
+      document.getElementById("name").innerHTML = `<a href="${addressMap[networkId]["explorer"]}${mint.transactionHash}">View Transaction</a>`;
+        document.getElementById("description").innerHTML = "data.description";
     }
 
     load()
