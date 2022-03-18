@@ -174,13 +174,13 @@
     }
 
     function showPreview() {
-      const metaDataURL = `https://ipfs.io/ipfs/${cid}`
+      const metaDataURL = `https://gateway.pinata.cloud/ipfs/${cid}`
       fetch(metaDataURL).then(res => {return res.json()}).then(data=> {
         updateStatus("#008000", 'Pinned to IPFS!');
         var img = document.createElement("img");
         img.setAttribute("style", "max-width: 80%");
         img.setAttribute("height", "auto");
-        img.src = `https://ipfs.io/ipfs/${data.image.replace("ipfs://", "")}`;
+        img.src = `https://gateway.pinata.cloud/ipfs/${data.image.replace("ipfs://", "")}`;
         previewArea.append(img)
         document.getElementById("name").innerHTML = data.name;
         document.getElementById("description").innerHTML = data.description;
