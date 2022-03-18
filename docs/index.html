@@ -41,7 +41,7 @@
             <div class="form-group">
               <label for="fileInput">Image file (.jpg or png)</label>
               <input name="file" id="fileInput" type="file" class="form-control-file" />
-              </div>
+            </div>
             <div class="form-group">
             <label for="exampleFormControlSelect2">Name</label>
             <input name="name" id="nameInput" type="text" class="form-control" placeholder="Cool Guy" />
@@ -158,12 +158,12 @@
     }
 
     function displayForm() {
+      document.getElementById("info").style.display = "none"
       ethereumButton.style.display = 'none';
       ipfsForm.style.display = 'inline';
     }
 
     function submitForm() {
-      document.getElementById("info").style.display = "none"
       updateStatus("#008000", 'Processing... (could take a minute)');
       ipfsForm.style.display = 'none';
       const request = new XMLHttpRequest();
