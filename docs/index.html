@@ -16,6 +16,16 @@
     <meta name="theme-color" content="#7952b3">
     <!-- Custom styles for this template -->
     <link href="cover.css" rel="stylesheet">
+
+    <style>
+        .dot {
+          height: 15px;
+          width: 15px;
+          background-color: #008000;
+          border-radius: 50%;
+          display: inline-block;
+        }
+    </style>
   </head>
   <body class="d-flex h-100 text-center text-white bg-dark">
     
@@ -26,7 +36,7 @@
           <nav class="nav nav-masthead justify-content-center float-md-end">
             <a class="nav-link" target="_blank" href="https://etherscan.io/address/0x4a4f4a202c840f7247cfcb429e1b41a5509176d8">Contract</a>
             <a class="nav-link" href="faq.html">FAQ</a>
-            <p class="nav-link"><span class="showAccount"></span></p>
+            <p class="nav-link"><span style="display: none" class="dot"></span><span class="showAccount"></span></p>
           </nav>
         </div>
       </header>
@@ -56,6 +66,7 @@
     const showAccount = document.querySelector('.showAccount');
     const formSubmit = document.querySelector('.formSubmit');
     const ipfsForm = document.querySelector("form");
+    const activeDot = document.querySelector("dot")
     const networkId = ""
     var cid = ""
 
@@ -100,7 +111,7 @@
           window.contract = await loadContract();
           networkId = await web3.eth.net.getChainId();
           console.log(networkId)
-          updateStatus("green", `Connected to ${addressMap[networkId]["networkName"]}`);
+          updateStatus("#008000", `Connected to ${addressMap[networkId]["networkName"]}`);
       } else {
         updateStatus('red', "Please install MetaMask");
       }
@@ -125,6 +136,8 @@
     async function getAccount() {
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       const account = accounts[0];
+
+      dot.style.display = "inline"
       showAccount.innerHTML = account.substring(0, 7) + "...";
       displayForm()
     }
@@ -157,7 +170,7 @@
       const account = await getCurrentAccount();
       const metaURI = `ipfs://${cid}`
       const mint = await window.contract.methods.mintNFT(account, metaURI).send({ from: account });
-      updateStatus("green", 'Minted.');
+      updateStatus("#008000", 'Minted.');
     }
 
     load()
