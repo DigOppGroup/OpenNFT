@@ -173,7 +173,7 @@
       const metaDataURL = `https://ipfs.io/ipfs/${cid}`
       fetch(metaDataURL).then(res => {return res.json()}).then(data=> {
         var img = document.createElement("img");
-        img.src = `https://ipfs.io/ipfs/${data.image}`;
+        img.src = `https://ipfs.io/ipfs/${data.image.replace("ipfs://", "")}`;
         previewArea.append(img)
         document.getElementById("name").innerHTML = data.name;
         document.getElementById("description").innerHTML = data.description;
