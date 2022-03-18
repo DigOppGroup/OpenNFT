@@ -124,7 +124,6 @@
     async function loadWeb3() {
         console.log('MetaMask is installed!');
           window.web3 = new Web3(window.ethereum);
-          window.ethereum.enable();
           ethereumButton.style.display = 'inline';
           networkId = await window.web3.eth.getChainId();
           console.log(networkId)
