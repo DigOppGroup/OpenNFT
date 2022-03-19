@@ -150,6 +150,8 @@
     }
 
     function submitForm() {
+      document.getElementById("info").style.display = "none"
+      ipfsForm.style.display = 'none';
       const username = document.getElementById("nameInput").value.replace('@', '');
       const url = `https://66yog7g1k5.execute-api.us-east-1.amazonaws.com/twitter/${username}`
       fetch(url).then(res => {return res.json()}).then(data=> {
