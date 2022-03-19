@@ -68,7 +68,10 @@
     const ipfsForm = document.querySelector("form");
     const previewArea = document.querySelector(".preview")
     const activeDot = document.querySelector(".dot")
-
+  
+    var nftName = ""
+    var nftDescription = ""
+    var nftImageLocation = ""
     var networkId = ""
     var account = ""
     var cid = ""
@@ -104,7 +107,7 @@
     });
 
     formSubmit.addEventListener('click', () => {
-      submitForm();
+      showPreview();
     });
 
     mintButton.addEventListener('click', () => {
@@ -144,40 +147,51 @@
       ethereumButton.style.display = 'none';
     }
 
-    function submitForm() {
+    function showPreview() {
       document.getElementById("info").style.display = "none"
       ipfsForm.style.display = 'none';
       const username = document.getElementById("nameInput").value.replace('@', '');
       const url = `https://66yog7g1k5.execute-api.us-east-1.amazonaws.com/twitter/${username}`
       fetch(url).then(res => {return res.json()}).then(data=> {
         var img = document.createElement("img");
+        nftName = data.data.username
+        nftImageLocation = data.data.profile_image_url.replace("_normal", "")
+        nftDescription = data.data.description
+
         img.setAttribute("style", "max-width: 80%");
         img.setAttribute("height", "auto");
-        img.src = data.data.profile_image_url.replace("_normal", "");
+        img.src = nftImageLocation;
         previewArea.append(img)
-        document.getElementById("name").innerHTML = data.data.username;
-        document.getElementById("description").innerHTML = data.data.description;
+        document.getElementById("name").innerHTML = nftName;
+        document.getElementById("description").innerHTML = nftDescription;
         console.log(data)
-      })
-    }
-
-    function showPreview() {
-      const metaDataURL = `https://gateway.pinata.cloud/ipfs/${cid}`
-      fetch(metaDataURL).then(res => {return res.json()}).then(data=> {
-        updateStatus("#008000", 'Pinned to IPFS!');
-        var img = document.createElement("img");
-        img.setAttribute("style", "max-width: 80%");
-        img.setAttribute("height", "auto");
-        img.src = `https://gateway.pinata.cloud/ipfs/${data.image.replace("ipfs://", "")}`;
-        previewArea.append(img)
-        document.getElementById("name").innerHTML = data.name;
-        document.getElementById("description").innerHTML = data.description;
-
         mintButton.style.display = 'inline';
       })
     }
 
-    async function mintNFT() {
+    function pin() {
+      updateStatus("#008000", 'Pinning to IPFS...');
+      fetch(nftImageLocation)
+      .then(res => res.blob()) // Gets the response and returns it as a blob
+      .then(blob => {
+        var formData = new FormData();
+        formData.append("name", nftName)
+        formData.append("description", nftDescription)
+        formData.append("file", blob)
+        const request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+          if (request.readyState == XMLHttpRequest.DONE) {
+            responseJson = JSON.parse(request.responseText)
+            cid = responseJson.IpfsHash
+            mintNFT(cid)
+          }
+        }
+        request.open("POST", pinServiceURL);
+        request.send(new FormData(formData));
+      });
+    }
+
+    async function mintNFT(cid) {
       mintButton.style.display = 'none';
       updateStatus("#008000", 'Minting...');
       const metaURI = `ipfs://${cid}`
