@@ -8,6 +8,7 @@ provider:
   environment:
     PINATA_API_KEY: ${param:pinataApiKey}
     PINATA_SECRET_API_KEY: ${param:pinataSecretApiKey}
+    TWITTER_BEARER_TOKEN: ${param:twitterBearerToken}
   name: aws
   runtime: nodejs12.x
   lambdaHashingVersion: 20201221
@@ -15,6 +16,12 @@ provider:
     cors: true
 
 functions:
+  twitterUser:
+    handler: twitter.profilePic
+    events:
+      - httpApi:
+          path: /twitter/{userName}
+          method: get
   pinFile:
     handler: handler.pinFile
     events:

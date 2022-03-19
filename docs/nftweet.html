@@ -7,7 +7,7 @@
     <meta name="description" content="Platform for minting NFT's using the OpenNFT contract">
     <meta name="author" content="Dalton Cole">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>OpenNFT - A DigOpp Experiment</title>
+    <title>NFTweet - A DigOpp Experiment</title>
     <!-- Bootstrap core CSS -->
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -23,7 +23,7 @@
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
       <header class="mb-auto">
         <div>
-          <h3 class="float-md-start mb-0">OpenNFT</h3>
+          <h3 class="float-md-start mb-0">NFTweet</h3>
           <nav class="nav nav-masthead justify-content-center float-md-end">
             <a class="nav-link" id="contractLink" target="_blank" href="https://etherscan.io/address/0x4a4f4a202c840f7247cfcb429e1b41a5509176d8">Contract</a>
             <a class="nav-link" target="_blank" href="https://opensea.io/collection/opennft-v3">OpenSea</a>
@@ -38,23 +38,13 @@
         <p class="lead" id="info">To mint an NFT using our OpenNFT smart contract, just connect to metamask, upload an image, give it a name and description, and then click mint!</p>
         <p class="lead">
           <a href="#" id="connectMetamask" style="display: none;" class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to MetaMask</a>
-          <form id="form" style="display: none">
+          <form id="form">
             <div class="form-group">
-              <label for="fileInput">Image file (.jpg or png)</label>
-            </br>
-              <input name="file" id="fileInput" type="file" class="form-control-file" />
-            </div>
-            <div class="form-group">
-            <label for="exampleFormControlSelect2">Name</label>
-            <input name="name" id="nameInput" type="text" class="form-control" placeholder="Cool Guy" />
-            </div>
-            <div class="form-group">
-              <label for="descriptionInput">Description</label>
-              <textarea name="description" id="descriptionInput" class="form-control" placeholder="Image of rare guy doing cool thing..."></textarea>
+            <label for="exampleFormControlSelect2">Username</label>
+            <input name="name" id="nameInput" type="text" class="form-control" placeholder="username" />
             </div>
           </br>
-            <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white formSubmit">Pin to IPFS</a>
-            
+            <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white formSubmit">Submit</a>
           </form>
           <div class="preview">
             <h3 id="name"></h3>
@@ -160,18 +150,11 @@
     }
 
     function submitForm() {
-      ipfsForm.style.display = 'none';
-      updateStatus("#008000", 'Processing... (could take a minute)');
-      const request = new XMLHttpRequest();
-      request.onreadystatechange = function() {
-        if (request.readyState == XMLHttpRequest.DONE) {
-          responseJson = JSON.parse(request.responseText)
-          cid = responseJson.IpfsHash
-          showPreview()
-        }
-      }
-      request.open("POST", pinServiceURL);
-      request.send(new FormData(ipfsForm));
+      const username = document.getElementById("nameInput").value.replace('@', '');
+      const url = `https://66yog7g1k5.execute-api.us-east-1.amazonaws.com/twitter/${username}`
+      fetch(url).then(res => {return res.json()}).then(data=> {
+        console.log(data)
+      })
     }
 
     function showPreview() {
