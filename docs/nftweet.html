@@ -153,6 +153,13 @@
       const username = document.getElementById("nameInput").value.replace('@', '');
       const url = `https://66yog7g1k5.execute-api.us-east-1.amazonaws.com/twitter/${username}`
       fetch(url).then(res => {return res.json()}).then(data=> {
+        var img = document.createElement("img");
+        img.setAttribute("style", "max-width: 80%");
+        img.setAttribute("height", "auto");
+        img.src = data.data.profile_image_url.replace("_normal", "");
+        previewArea.append(img)
+        document.getElementById("name").innerHTML = data.data.username;
+        document.getElementById("description").innerHTML = data.data.description;
         console.log(data)
       })
     }
