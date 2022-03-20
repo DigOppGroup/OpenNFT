@@ -37,20 +37,20 @@
         <p id="status"></p>
         <p class="lead" id="info">Connect your wallet, enter your Twitter username, then just pay the gas to mint! Images and metadata are stored on IPFS. NFTs are written to the OpenNFT contract.</p>
         <p class="lead">
-          <a href="#" id="connectMetamask" style="display: none;" class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to Wallet</a>
-          <form style="display: none" id="form">
+          <a href="#" id="connectMetamask" class="btn btn-outline-light enableEthereumButton">Connect to Wallet</a>
+          <form style="display: none;" id="form">
             <div class="form-group">
             <label for="exampleFormControlSelect2">Twitter Username</label>
             <input name="name" id="nameInput" type="text" class="form-control" placeholder="dontPutTheAtSign" />
             </div>
           </br>
-            <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white formSubmit">Submit</a>
+            <a href="#" class="btn btn-outline-light formSubmit">Fetch Profile</a>
           </form>
           <div class="preview">
             <h3 id="name"></h3>
             <p id="description"></p>
           </div>
-          <a href="#" style="display: none" class="btn btn-lg btn-secondary fw-bold border-white bg-white mintNFT">Mint</a>
+          <a href="#" style="display: none" class="btn btn-outline-light mintNFT">Mint</a>
         </p>
       </main>
 
@@ -149,11 +149,16 @@
     }
 
     function showPreview() {
-      document.getElementById("info").style.display = "none"
+      const username = document.getElementById("nameInput").value.replace('@', '');
+      if (username == "") {
+        updateStatus("red", 'Enter a username');
+      } else {
+        document.getElementById("info").style.display = "none"
       ipfsForm.style.display = 'none';
       const username = document.getElementById("nameInput").value.replace('@', '');
       const url = `https://66yog7g1k5.execute-api.us-east-1.amazonaws.com/twitter/${username}`
       fetch(url).then(res => {return res.json()}).then(data=> {
+        updateStatus("#008000", 'Profile Retrieved');
         var img = document.createElement("img");
         nftName = data.data.username
         nftImageLocation = data.data.profile_image_url.replace("_normal", "")
@@ -168,6 +173,7 @@
         console.log(data)
         mintButton.style.display = 'inline';
       })
+      }
     }
 
     function pin() {

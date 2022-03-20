@@ -10,12 +10,18 @@
   text-shadow: none; /* Prevent inheritance from `body` */
 }
 
+.btn-outline-light,
+.btn-outline-light:hover,
+.btn-outline-light:focus {
+  text-shadow: none; /* Prevent inheritance from `body` */
+}
+
 /*
  * Base structure
  */
 
 body {
-  text-shadow: 0 0.05rem 0.1rem rgba(24, 9, 159, 0.75);
+  text-shadow: 0 0.05rem 0.1rem rgba(27, 16, 129, 0.75);
 }
 
 .cover-container {
