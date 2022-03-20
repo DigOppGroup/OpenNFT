@@ -126,7 +126,7 @@
           ethereumButton.style.display = 'inline';
           networkId = await window.web3.eth.getChainId();
           console.log(networkId)
-          updateStatus("#008000", `Connected to ${addressMap[networkId]["networkName"]}`);
+          updateStatus("#16c316", `Connected to ${addressMap[networkId]["networkName"]}`);
           document.getElementById("contractLink").href=`${addressMap[networkId]["explorer"]}/address/${addressMap[networkId]["contractAddress"]}`; 
           window.contract = await loadContract();
     }
@@ -146,7 +146,7 @@
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       account = accounts[0];
 
-      activeDot.style.backgroundColor = "#008000"
+      activeDot.style.backgroundColor = "#16c316"
       showAccount.innerHTML = account.substring(0, 7) + "...";
       document.getElementById("info").style.display = "none"
       ethereumButton.style.display = 'none';
@@ -163,7 +163,7 @@
       const username = document.getElementById("nameInput").value.replace('@', '');
       const url = `https://66yog7g1k5.execute-api.us-east-1.amazonaws.com/twitter/${username}`
       fetch(url).then(res => {return res.json()}).then(data=> {
-        updateStatus("#008000", 'Profile Retrieved');
+        updateStatus("#16c316", 'Profile Retrieved');
         var img = document.createElement("img");
         nftName = data.data.username
         nftImageLocation = data.data.profile_image_url.replace("_normal", "")
@@ -182,7 +182,7 @@
     }
 
     function pin() {
-      updateStatus("#008000", 'Pinning to IPFS...');
+      updateStatus("#16c316", 'Pinning to IPFS...');
       fetch(nftImageLocation)
       .then(res => res.blob()) // Gets the response and returns it as a blob
       .then(blob => {
@@ -205,11 +205,11 @@
 
     async function mintNFT(cid) {
       mintButton.style.display = 'none';
-      updateStatus("#008000", 'Minting...');
+      updateStatus("#16c316", 'Minting...');
       const metaURI = `ipfs://${cid}`
       const mint = await window.contract.methods.mintNFT(account, metaURI).send({ from: account });
       console.log(mint)
-      updateStatus("#008000", 'Minted');
+      updateStatus("#16c316", 'Minted');
       document.getElementById("name").innerHTML = `<a href="${addressMap[networkId]["explorer"]}/tx/${mint.transactionHash}" class="text-white" target="_blank">View Transaction</a>`;
         document.getElementById("description").innerHTML = "";
     }
