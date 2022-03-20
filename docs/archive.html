@@ -23,44 +23,50 @@
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
       <header class="mb-auto">
         <div>
-          <a class="text-white" href="https://digoppgroup.github.io/OpenNFT/nftweet"><h3 class="float-md-start mb-0">OpenNFT</h3></a>
+          <h3 class="float-md-start mb-0">OpenNFT</h3>
           <nav class="nav nav-masthead justify-content-center float-md-end">
             <a class="nav-link" id="contractLink" target="_blank" href="https://etherscan.io/address/0x4a4f4a202c840f7247cfcb429e1b41a5509176d8">Contract</a>
             <a class="nav-link" target="_blank" href="https://opensea.io/collection/opennft-v3">OpenSea</a>
-            <a class="nav-link" target="_blank" href="https://twitter.com/0xjellybeard/status/1505198777250025474?s=21">Demo</a>
-            <p class="nav-link"><span class="dot"></span>&nbsp;<span class="showAccount"></span></p>
+            <a class="nav-link" href="faq.html">FAQ</a>
+            <p class="nav-link"><span class="dot"></span><span class="showAccount"></span></p>
           </nav>
         </div>
       </header>
 
       <main class="px-3 ">
         <p id="status"></p>
-        <p class="lead" id="info">Connect your wallet, enter your Twitter username, then just pay the gas to mint! Images and metadata are stored on IPFS. NFTs are written to the OpenNFT contract.</p>
+        <p class="lead" id="info">To mint an NFT using our OpenNFT smart contract, just connect to metamask, upload an image, give it a name and description, and then click mint!</p>
         <p class="lead">
-          <a href="#"  id="connectMetamask" class="btn btn-outline-light enableEthereumButton">Connect to Wallet</a>
-          <form style="display: none;" id="form">
+          <a href="#" id="connectMetamask" style="display: none;" class="btn btn-lg btn-secondary fw-bold border-white bg-white enableEthereumButton">Connect to MetaMask</a>
+          <form id="form" style="display: none">
             <div class="form-group">
-              <label for="exampleFormControlSelect2">Twitter Username</label>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">@</span>
-                </div>
-                <input name="name" id="nameInput" type="text" class="form-control" placeholder="dontPutTheAtSign" />
-              </div>
+              <label for="fileInput">Image file (.jpg or png)</label>
+            </br>
+              <input name="file" id="fileInput" type="file" class="form-control-file" />
+            </div>
+            <div class="form-group">
+            <label for="exampleFormControlSelect2">Name</label>
+            <input name="name" id="nameInput" type="text" class="form-control" placeholder="Cool Guy" />
+            </div>
+            <div class="form-group">
+              <label for="descriptionInput">Description</label>
+              <textarea name="description" id="descriptionInput" class="form-control" placeholder="Image of rare guy doing cool thing..."></textarea>
             </div>
           </br>
-            <a href="#" class="btn btn-outline-light formSubmit">Fetch Profile</a>
+            <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white formSubmit">Pin to IPFS</a>
+            
           </form>
           <div class="preview">
             <h3 id="name"></h3>
             <p id="description"></p>
           </div>
-          <a href="#" style="display: none" class="btn btn-outline-light mintNFT">Mint</a>
+          <a href="#" style="display: none" class="btn btn-lg btn-secondary fw-bold border-white bg-white mintNFT">Mint</a>
         </p>
       </main>
 
       <footer class="mt-auto text-white-50">
         <p><a href="https://github.com/DigOppGroup/OpenNFT" class="text-white" target="_blank">Github</a> | <a href="https://digopp.group" class="text-white" target="_blank">Digital Opportunities Group</a> | <a href="https://twitter.com/0xjellyBeard" class="text-white" target="_blank">@0xjellyBeard</a>.</p>
+        <p>Cover template for <a href="https://twitter.com/0xjellyBeard" class="text-white" target="_blank">Bootstrap</a>, by <a href="https://twitter.com/mdo" class="text-white" target="_blank">@mdo</a>.</p>
       </footer>
     </div>
   </body>
@@ -72,10 +78,7 @@
     const ipfsForm = document.querySelector("form");
     const previewArea = document.querySelector(".preview")
     const activeDot = document.querySelector(".dot")
-  
-    var nftName = ""
-    var nftDescription = ""
-    var nftImageLocation = ""
+
     var networkId = ""
     var account = ""
     var cid = ""
@@ -111,14 +114,13 @@
     });
 
     formSubmit.addEventListener('click', () => {
-      showPreview();
+      submitForm();
     });
 
     mintButton.addEventListener('click', () => {
-      pin();
+      mintNFT();
     });
 
-    window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
 
     async function loadWeb3() {
         console.log('MetaMask is installed!');
@@ -126,7 +128,7 @@
           ethereumButton.style.display = 'inline';
           networkId = await window.web3.eth.getChainId();
           console.log(networkId)
-          updateStatus("#16c316", `Connected to ${addressMap[networkId]["networkName"]}`);
+          updateStatus("#008000", `Connected to ${addressMap[networkId]["networkName"]}`);
           document.getElementById("contractLink").href=`${addressMap[networkId]["explorer"]}/address/${addressMap[networkId]["contractAddress"]}`; 
           window.contract = await loadContract();
     }
@@ -146,71 +148,56 @@
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       account = accounts[0];
 
-      activeDot.style.backgroundColor = "#16c316"
+      activeDot.style.backgroundColor = "#008000"
       showAccount.innerHTML = account.substring(0, 7) + "...";
+      displayForm()
+    }
+
+    function displayForm() {
       document.getElementById("info").style.display = "none"
       ethereumButton.style.display = 'none';
       ipfsForm.style.display = 'inline';
     }
 
-    function showPreview() {
-      const username = document.getElementById("nameInput").value.replace('@', '');
-      if (username == "") {
-        updateStatus("red", 'Enter a username');
-      } else {
-        document.getElementById("info").style.display = "none"
+    function submitForm() {
       ipfsForm.style.display = 'none';
-      const username = document.getElementById("nameInput").value.replace('@', '');
-      const url = `https://66yog7g1k5.execute-api.us-east-1.amazonaws.com/twitter/${username}`
-      fetch(url).then(res => {return res.json()}).then(data=> {
-        updateStatus("#16c316", 'Profile Retrieved');
-        var img = document.createElement("img");
-        nftName = data.data.username
-        nftImageLocation = data.data.profile_image_url.replace("_normal", "")
-        nftDescription = data.data.description
+      updateStatus("#008000", 'Processing... (could take a minute)');
+      const request = new XMLHttpRequest();
+      request.onreadystatechange = function() {
+        if (request.readyState == XMLHttpRequest.DONE) {
+          responseJson = JSON.parse(request.responseText)
+          cid = responseJson.IpfsHash
+          showPreview()
+        }
+      }
+      request.open("POST", pinServiceURL);
+      request.send(new FormData(ipfsForm));
+    }
 
+    function showPreview() {
+      const metaDataURL = `https://gateway.pinata.cloud/ipfs/${cid}`
+      fetch(metaDataURL).then(res => {return res.json()}).then(data=> {
+        updateStatus("#008000", 'Pinned to IPFS!');
+        var img = document.createElement("img");
         img.setAttribute("style", "max-width: 80%");
-        img.setAttribute("height", "350px");
-        img.src = nftImageLocation;
+        img.setAttribute("height", "auto");
+        img.src = `https://gateway.pinata.cloud/ipfs/${data.image.replace("ipfs://", "")}`;
         previewArea.append(img)
-        document.getElementById("name").innerHTML = nftName;
-        document.getElementById("description").innerHTML = nftDescription;
-        console.log(data)
+        document.getElementById("name").innerHTML = data.name;
+        document.getElementById("description").innerHTML = data.description;
+
         mintButton.style.display = 'inline';
       })
-      }
     }
 
-    function pin() {
-      updateStatus("#16c316", 'Pinning to IPFS...');
-      fetch(nftImageLocation)
-      .then(res => res.blob()) // Gets the response and returns it as a blob
-      .then(blob => {
-        var formData = new FormData();
-        formData.append("name", nftName)
-        formData.append("description", nftDescription)
-        formData.append("file", blob)
-        const request = new XMLHttpRequest();
-        request.onreadystatechange = function() {
-          if (request.readyState == XMLHttpRequest.DONE) {
-            responseJson = JSON.parse(request.responseText)
-            cid = responseJson.IpfsHash
-            mintNFT(cid)
-          }
-        }
-        request.open("POST", pinServiceURL);
-        request.send(formData);
-      });
-    }
-
-    async function mintNFT(cid) {
+    async function mintNFT() {
       mintButton.style.display = 'none';
-      updateStatus("#16c316", 'Minting...');
+      updateStatus("#008000", 'Minting...');
       const metaURI = `ipfs://${cid}`
       const mint = await window.contract.methods.mintNFT(account, metaURI).send({ from: account });
       console.log(mint)
-      updateStatus("#16c316", 'Minted');
-      document.getElementById("name").innerHTML = `<a href="${addressMap[networkId]["explorer"]}/tx/${mint.transactionHash}" class="text-white" target="_blank">View Transaction</a>`;
+      updateStatus("#008000", 'Minted');
+      document.getElementById("name").innerHTML = `<a href="${addressMap[networkId]["explorer"]}/tx/${mint.transactionHash}">View Transaction</a>`;
         document.getElementById("description").innerHTML = "";
     }
 
