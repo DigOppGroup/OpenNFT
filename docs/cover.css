@@ -2,18 +2,11 @@
  * Globals
  */
 
-/* Custom default button */
-.btn-secondary,
-.btn-secondary:hover,
-.btn-secondary:focus {
-  color: #333;
-  text-shadow: none; /* Prevent inheritance from `body` */
-}
-
 .btn-outline-light,
 .btn-outline-light:hover,
 .btn-outline-light:focus {
-  text-shadow: none; /* Prevent inheritance from `body` */
+  text-shadow: none;
+  border-radius: 0%; /* Prevent inheritance from `body` */
 }
 
 /*
@@ -34,6 +27,9 @@ body {
   display: inline-block;
 }
 
+.form-control {
+  border-radius: 0%;
+}
 .nav-masthead .nav-link {
   padding: 0.25rem 0;
   font-weight: 700;
