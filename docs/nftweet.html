@@ -41,6 +41,9 @@
           <form style="display: none;" id="form">
             <div class="form-group">
             <label for="exampleFormControlSelect2">Twitter Username</label>
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">@</span>
+            </div>
             <input name="name" id="nameInput" type="text" class="form-control" placeholder="dontPutTheAtSign" />
             </div>
           </br>
@@ -113,6 +116,7 @@
       pin();
     });
 
+    window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
 
     async function loadWeb3() {
         console.log('MetaMask is installed!');
